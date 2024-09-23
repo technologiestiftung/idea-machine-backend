@@ -9,18 +9,19 @@ body {
 }
 
 main {
-	max-width: 400px;
+	max-width: 90vw;
 	min-width: 350px;
 }
 
 button {
 	margin-top: 2rem;
-	width: 100%;
+	width: 200px;
 	background-color: #121212;
 	color: white;
 	border: none;
 	padding: 0.5rem 1rem;
 	cursor: pointer;
+	align-self: center;
 }
 
 button:hover {
@@ -28,7 +29,7 @@ button:hover {
 }
 
 input[type="text"] {
-	width: 80%;
+	width: 90%;
 	padding: 10px 20px;
 	margin: 8px 0;
 	display: inline-block;
@@ -74,4 +75,21 @@ h3 {
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
+}
+
+.focus-group-container {
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;
+	gap: 4rem;
+}
+
+label {
+	font-weight: bold;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
