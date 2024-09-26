@@ -163,7 +163,7 @@ export function getLabelsForCurrentSides() {
  * @param side
  * @returns {string[]}
  */
-function getLabelFromSide(side) {
+export function getLabelFromSide(side) {
 	const label = /** @type string */ labels[side];
 
 	if (label.includes(",")) {
@@ -188,28 +188,25 @@ export function getAllLabelsForSides({ A, B, C }) {
 	return { focusGroup, topic, medium };
 }
 
-function assignRandomSide(cube) {
-	const random = Math.floor(Math.random() * 6) + 1;
-	setDiceSide(`${cube}${random}`);
-}
-
 /**
  * Returns all labels as array for the current dice sides
  * @returns {{focusGroup: string[], topic: string[], medium: string[]}}
  */
 export function getAllLabelsForCurrentSides() {
-	dices.A.side === null && assignRandomSide("A");
-	dices.B.side === null && assignRandomSide("B");
-	dices.C.side === null && assignRandomSide("C");
+	if (dices.A.side === null || dices.B.side === null || dices.C.side === null) {
+		return {
+			focusGroup: dices.A.side,
+			topic: dices.B.side,
+			medium: dices.C.side,
+		};
+	}
 
 	const A = `A${dices.A.side}`;
 	const B = `B${dices.B.side}`;
 	const C = `C${dices.C.side}`;
-
 	const focusGroup = getLabelFromSide(A);
 	const topic = getLabelFromSide(B);
 	const medium = getLabelFromSide(C);
-
 	return { focusGroup, topic, medium };
 }
 
