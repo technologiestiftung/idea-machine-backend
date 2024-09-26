@@ -188,18 +188,19 @@ export function getAllLabelsForSides({ A, B, C }) {
 	return { focusGroup, topic, medium };
 }
 
+function assignRandomSide(cube) {
+	const random = Math.floor(Math.random() * 6) + 1;
+	setDiceSide(`${cube}${random}`);
+}
+
 /**
  * Returns all labels as array for the current dice sides
  * @returns {{focusGroup: string[], topic: string[], medium: string[]}}
  */
 export function getAllLabelsForCurrentSides() {
-	if (dices.A.side === null || dices.B.side === null || dices.C.side === null) {
-		return {
-			focusGroup: dices.A.side,
-			topic: dices.B.side,
-			medium: dices.C.side,
-		};
-	}
+	dices.A.side === null && assignRandomSide("A");
+	dices.B.side === null && assignRandomSide("B");
+	dices.C.side === null && assignRandomSide("C");
 
 	const A = `A${dices.A.side}`;
 	const B = `B${dices.B.side}`;
