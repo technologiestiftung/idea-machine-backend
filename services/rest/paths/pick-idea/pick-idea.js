@@ -120,9 +120,9 @@ let isRegenerating = false;
 
 /**
  * Regenerates an idea for the current dice sides
- * @param {string} focusGroup
- * @param {string} topic
- * @param {string} medium
+ * @param {string[]} focusGroup
+ * @param {string[]} topic
+ * @param {string[]} medium
  * @returns {Promise<void>}
  */
 export async function regenerate(focusGroup, topic, medium) {
@@ -155,9 +155,9 @@ export async function regenerate(focusGroup, topic, medium) {
 
 /**
  * Checks if there are enough pregenerated ideas for the current dice sides
- * @param {string} focusGroup
- * @param {string} topic
- * @param {string} medium
+ * @param {string[]} focusGroup
+ * @param {string[]} topic
+ * @param {string[]} medium
  * @returns {Promise<boolean>}
  */
 async function hasEnoughIdeas(focusGroup, topic, medium) {
