@@ -1,6 +1,5 @@
 import {
 	getAllLabelsForCurrentSides,
-	getLabelsForCurrentSides,
 	getLabelFromSide,
 } from "../../../state/state.js";
 import { supabase } from "../../../supabase/supabase.js";
@@ -61,11 +60,9 @@ async function pickIdea() {
 		const errorMessage = `Some dices have not set a side yet: ${JSON.stringify({ focusGroup, topic, medium })}`;
 		console.error(errorMessage);
 
-		const random = Math.floor(Math.random() * 6) + 1;
-
-		focusGroup = focusGroup || getLabelFromSide(`A${random}`);
-		topic = topic || getLabelFromSide(`B${random}`);
-		medium = medium || getLabelFromSide(`C${random}`);
+		focusGroup = focusGroup || getLabelFromSide(`A${getRandomNumber(1, 6)}`);
+		topic = topic || getLabelFromSide(`B${getRandomNumber(1, 6)}`);
+		medium = medium || getLabelFromSide(`C${getRandomNumber(1, 6)}`);
 	}
 
 	const { data, error } = await supabase
@@ -81,10 +78,15 @@ async function pickIdea() {
 	}
 
 	if (data.length === 0) {
+		const randomFocusGroup =
+			focusGroup[getRandomNumber(0, focusGroup.length - 1)];
+		const randomTopic = topic[getRandomNumber(0, topic.length - 1)];
+		const randomMedium = medium[getRandomNumber(0, medium.length - 1)];
+
 		const idea = await generateIdea({
-			focusGroup,
-			medium,
-			topic,
+			focusGroup: randomFocusGroup,
+			medium: randomMedium,
+			topic: randomTopic,
 			strategy: strategies.realtime,
 		});
 
@@ -133,10 +135,15 @@ export async function regenerate(focusGroup, topic, medium) {
 
 	console.time("regeneration");
 
+	const randomFocusGroup =
+		focusGroup[getRandomNumber(0, focusGroup.length - 1)];
+	const randomTopic = topic[getRandomNumber(0, topic.length - 1)];
+	const randomMedium = medium[getRandomNumber(0, medium.length - 1)];
+
 	await generateIdea({
-		focusGroup,
-		medium,
-		topic,
+		focusGroup: randomFocusGroup,
+		medium: randomMedium,
+		topic: randomTopic,
 		strategy: strategies.pregenerate,
 	});
 	console.timeEnd("regeneration");
@@ -177,4 +184,8 @@ async function hasEnoughIdeas(focusGroup, topic, medium) {
 	}
 
 	return true;
+}
+
+function getRandomNumber(min, max) {
+	return Math.floor(Math.random() * (max - min + 1) + min);
 }
