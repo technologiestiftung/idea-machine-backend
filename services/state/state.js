@@ -193,14 +193,6 @@ export function getAllLabelsForSides({ A, B, C }) {
  * @returns {{focusGroup: string[], topic: string[], medium: string[]}}
  */
 export function getAllLabelsForCurrentSides() {
-	// if (dices.A.side === null || dices.B.side === null || dices.C.side === null) {
-	// 	return {
-	// 		focusGroup: dices.A.side,
-	// 		topic: dices.B.side,
-	// 		medium: dices.C.side,
-	// 	};
-	// }
-
 	if (dices.A.side === null || dices.B.side === null || dices.C.side === null) {
 		const errorMessage = `Some dices have not set a side yet: ${JSON.stringify(dices.A.side, dices.B.side, dices.C.side)}`;
 		console.error(errorMessage);
