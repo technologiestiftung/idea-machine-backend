@@ -1,6 +1,6 @@
 import {
 	getAllLabelsForCurrentSides,
-	getLabelsForCurrentSides,
+	getLabelFromSide,
 } from "../../../state/state.js";
 import { supabase } from "../../../supabase/supabase.js";
 import { generateIdea } from "../../idea-generation/idea-generation.js";
@@ -56,11 +56,9 @@ export async function handlePickIdea(response) {
 async function pickIdea() {
 	const { focusGroup, topic, medium } = getAllLabelsForCurrentSides();
 
-	if (!focusGroup || !topic || !medium) {
-		const errorMessage = `Some dices have not set a side yet: ${JSON.stringify({focusGroup, topic, medium})}`;
-		console.error(errorMessage);
-		return { error: errorMessage}
-	}
+	console.log({ focusGroup });
+	console.log({ topic });
+	console.log({ medium });
 
 	const { data, error } = await supabase
 		.from("pregenerated_ideas")
@@ -75,12 +73,15 @@ async function pickIdea() {
 	}
 
 	if (data.length === 0) {
-		const { focusGroup, topic, medium } = getLabelsForCurrentSides();
+		const randomFocusGroup =
+			focusGroup[getRandomNumber(0, focusGroup.length - 1)];
+		const randomTopic = topic[getRandomNumber(0, topic.length - 1)];
+		const randomMedium = medium[getRandomNumber(0, medium.length - 1)];
 
 		const idea = await generateIdea({
-			focusGroup,
-			medium,
-			topic,
+			focusGroup: randomFocusGroup,
+			medium: randomMedium,
+			topic: randomTopic,
 			strategy: strategies.realtime,
 		});
 
@@ -101,7 +102,7 @@ async function pickIdea() {
 	/**
 	 * this promise is not awaited by design, so it runs in the background
 	 */
-	regenerate();
+	regenerate(focusGroup, topic, medium);
 
 	return {
 		idea: pickedIdea,
@@ -116,9 +117,12 @@ let isRegenerating = false;
 
 /**
  * Regenerates an idea for the current dice sides
+ * @param {string[]} focusGroup
+ * @param {string[]} topic
+ * @param {string[]} medium
  * @returns {Promise<void>}
  */
-export async function regenerate() {
+export async function regenerate(focusGroup, topic, medium) {
 	if (isRegenerating) {
 		return;
 	}
@@ -126,35 +130,39 @@ export async function regenerate() {
 
 	console.time("regeneration");
 
-	const { focusGroup, medium, topic } = getLabelsForCurrentSides();
+	const randomFocusGroup =
+		focusGroup[getRandomNumber(0, focusGroup.length - 1)];
+	const randomTopic = topic[getRandomNumber(0, topic.length - 1)];
+	const randomMedium = medium[getRandomNumber(0, medium.length - 1)];
 
 	await generateIdea({
-		focusGroup,
-		medium,
-		topic,
+		focusGroup: randomFocusGroup,
+		medium: randomMedium,
+		topic: randomTopic,
 		strategy: strategies.pregenerate,
 	});
 	console.timeEnd("regeneration");
 
 	isRegenerating = false;
 
-	if (await hasEnoughIdeas()) {
+	if (await hasEnoughIdeas(focusGroup, topic, medium)) {
 		return;
 	}
 
 	/**
 	 * this promise is not awaited by design, so it runs in the background
 	 */
-	regenerate();
+	regenerate(focusGroup, topic, medium);
 }
 
 /**
  * Checks if there are enough pregenerated ideas for the current dice sides
+ * @param {string[]} focusGroup
+ * @param {string[]} topic
+ * @param {string[]} medium
  * @returns {Promise<boolean>}
  */
-async function hasEnoughIdeas() {
-	const { focusGroup, topic, medium } = getAllLabelsForCurrentSides();
-
+async function hasEnoughIdeas(focusGroup, topic, medium) {
 	const { data, error } = await supabase
 		.from("pregenerated_ideas")
 		.select("*")
@@ -171,4 +179,8 @@ async function hasEnoughIdeas() {
 	}
 
 	return true;
+}
+
+function getRandomNumber(min, max) {
+	return Math.floor(Math.random() * (max - min + 1) + min);
 }
