@@ -54,16 +54,11 @@ export async function handlePickIdea(response) {
  * @returns {Promise<{error: string}|{idea: dbIdea}|{idea:Idea}>}
  */
 async function pickIdea() {
-	let { focusGroup, topic, medium } = getAllLabelsForCurrentSides();
+	const { focusGroup, topic, medium } = getAllLabelsForCurrentSides();
 
-	if (!focusGroup || !topic || !medium) {
-		const errorMessage = `Some dices have not set a side yet: ${JSON.stringify({ focusGroup, topic, medium })}`;
-		console.error(errorMessage);
-
-		focusGroup = focusGroup || getLabelFromSide(`A${getRandomNumber(1, 6)}`);
-		topic = topic || getLabelFromSide(`B${getRandomNumber(1, 6)}`);
-		medium = medium || getLabelFromSide(`C${getRandomNumber(1, 6)}`);
-	}
+	console.log({ focusGroup });
+	console.log({ topic });
+	console.log({ medium });
 
 	const { data, error } = await supabase
 		.from("pregenerated_ideas")

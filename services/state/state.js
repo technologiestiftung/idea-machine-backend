@@ -193,17 +193,25 @@ export function getAllLabelsForSides({ A, B, C }) {
  * @returns {{focusGroup: string[], topic: string[], medium: string[]}}
  */
 export function getAllLabelsForCurrentSides() {
+	// if (dices.A.side === null || dices.B.side === null || dices.C.side === null) {
+	// 	return {
+	// 		focusGroup: dices.A.side,
+	// 		topic: dices.B.side,
+	// 		medium: dices.C.side,
+	// 	};
+	// }
+
 	if (dices.A.side === null || dices.B.side === null || dices.C.side === null) {
-		return {
-			focusGroup: dices.A.side,
-			topic: dices.B.side,
-			medium: dices.C.side,
-		};
+		const errorMessage = `Some dices have not set a side yet: ${JSON.stringify(dices.A.side, dices.B.side, dices.C.side)}`;
+		console.error(errorMessage);
 	}
 
-	const A = `A${dices.A.side}`;
-	const B = `B${dices.B.side}`;
-	const C = `C${dices.C.side}`;
+	const A = dices.A.side ? `A${dices.A.side}` : `A${getRandomNumber(1, 6)}`;
+	const B = dices.B.side ? `B${dices.B.side}` : `B${getRandomNumber(1, 6)}`;
+	const C = dices.C.side ? `C${dices.C.side}` : `C${getRandomNumber(1, 6)}`;
+
+	console.log(A, B, C);
+
 	const focusGroup = getLabelFromSide(A);
 	const topic = getLabelFromSide(B);
 	const medium = getLabelFromSide(C);
@@ -221,4 +229,8 @@ export function setLabels(newLabels) {
 	} catch (error) {
 		console.error(error);
 	}
+}
+
+function getRandomNumber(min, max) {
+	return Math.floor(Math.random() * (max - min + 1) + min);
 }
