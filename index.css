@@ -14,7 +14,7 @@ main {
 }
 
 button {
-	margin-top: 2rem;
+	margin-top: 1rem;
 	width: 200px;
 	background-color: #121212;
 	color: white;
@@ -98,4 +98,13 @@ form {
 .group-b,
 .group-c {
 	width: 280px;
+}
+
+.warning {
+	border: 2px solid;
+	padding: 0.5rem;
+	background-color: #f4a203;
+	margin-top: 1rem;
+	margin-left: auto;
+	margin-right: auto;
 }
