@@ -19,7 +19,7 @@
 		"prettier": "3.3.3"
 	},
 	"dependencies": {
-		"@supabase/supabase-js": "2.45.4",
+		"@supabase/supabase-js": "2.45.6",
 		"ws": "8.18.0"
 	}
 }
