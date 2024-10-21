@@ -149,6 +149,8 @@
 						</div>
 					</div>
 				</div>
+
+				<div class="warning">⚠️Warnung: Speichern verursacht Kosten ⚠️</div>
 				<button type="submit">Speichern</button>
 			</form>
 		</main>
@@ -216,6 +218,13 @@
 	</body>
 	<script type="text/javascript">
 		function onSubmit(event) {
+			const confirmationText = `Speichern verursacht kosten. Sind Sie sich sicher, diese Änderungen speichern zu wollen?`;
+
+			if (confirm(confirmationText) === false) {
+				event.preventDefault();
+				return;
+			}
+
 			event.preventDefault();
 
 			const labels = {};
