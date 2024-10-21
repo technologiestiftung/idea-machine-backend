@@ -81,7 +81,7 @@ export function setDiceSide(input) {
 
 	const [diceId, diceSide] = diceIdAndSide;
 
-	setDices(diceId, { ...dices[diceId], side: diceSide });
+	setDices(diceId, { status: "connected", side: diceSide });
 }
 
 export function getDices() {
