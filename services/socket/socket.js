@@ -13,7 +13,7 @@ webSocketServer.on("connection", function connection(webSocket) {
 	webSocket.on("error", console.error);
 
 	webSocket.on("message", function message(data) {
-		console.log("received: %s", data);
+		// console.log("received: %s", data);
 	});
 
 	webSocket.send(getDicesAsJson());
@@ -22,7 +22,7 @@ webSocketServer.on("connection", function connection(webSocket) {
 webSocketServer.on("close", () => console.log("websocket server closed"));
 
 export function broadcast(data) {
-	console.log("broadcast", data);
+	// console.log("broadcast", data);
 	webSocketServer.clients.forEach((client) => {
 		if (client.readyState !== WebSocket.OPEN) {
 			return;
