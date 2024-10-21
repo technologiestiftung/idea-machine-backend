@@ -1,5 +1,7 @@
 import { getLabels, setLabels } from "../../../state/state.js";
 
+const port = process.env.API_PORT;
+
 /**
  * Handles the labels endpoint
  * @param request
@@ -40,4 +42,9 @@ function handlePutLabels({ body, response }) {
 	setLabels(newLabels);
 
 	response.end(JSON.stringify({ message: "success" }));
+
+	/**
+	 * start pregeneration in the background
+	 */
+	fetch(`http://localhost:${port}/pregenerate`).catch(console.error);
 }
