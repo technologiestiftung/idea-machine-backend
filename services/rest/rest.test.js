@@ -14,11 +14,11 @@ describe("services/rest", () => {
 
 			assert.strictEqual(response.status, 204);
 			assert.strictEqual(
-				response.headers.get("access-control-allow-origin"),
+				response.headers.get("Access-Control-Allow-Origin"),
 				"*",
 			);
 			assert.strictEqual(
-				response.headers.get("access-control-request-method"),
+				response.headers.get("Access-Control-Allow-Methods"),
 				"OPTIONS, PUT, GET",
 			);
 		});
@@ -52,19 +52,28 @@ describe("services/rest", () => {
 			const currentLabels = getLabels();
 			const givenLabels = { ...currentLabels, A1: "some other label" };
 
-			const response = await fetch("http://localhost:8000/labels", {
+			const promise = fetch("http://localhost:8000/labels", {
 				method: "PUT",
 				body: JSON.stringify({ labels: givenLabels }),
 			});
+
+			t.mock.method(global, "fetch");
+			fetch.mock.mockImplementationOnce(async () => ({
+				json: () => Promise.resolve({ message: "success" }),
+			}));
+
+			const response = await promise;
 
 			const actualResponse = await response.json();
 			const expectedResponse = { message: "success" };
 
 			const actualLabels = getLabels();
 			const expectedLabels = givenLabels;
+			const expectedFetchUrl = `http://localhost:${process.env.API_PORT}/pregenerate`;
 
 			assert.deepStrictEqual(actualResponse, expectedResponse);
 			assert.deepStrictEqual(actualLabels, expectedLabels);
+			assert.strictEqual(fetch.mock.calls[0].arguments[0], expectedFetchUrl);
 
 			// reset labels
 			setLabels(currentLabels);
