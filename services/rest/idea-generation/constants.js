@@ -17,4 +17,4 @@ export const strategies = {
  * The amount of pregenerated ideas that need to be generated in advance.
  * @type {number}
  */
-export const MIN_AMOUNT_OF_PREGENERATED_IDEAS = 2;
+export const MIN_AMOUNT_OF_PREGENERATED_IDEAS = 1;
