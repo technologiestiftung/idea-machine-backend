@@ -1,9 +1,11 @@
 setTimeout(async () => {
-	const bluetoothSerialMonitors = import("./services/bluetooth/bluetooth.js");
-	const server = import("./services/rest/rest.js");
-	const { webSocketServer } = import("./services/socket/socket.js");
-	const { gpioProcess } = import("./services/gpio/gpio.js");
-	await import("./services/print/print.js");
+	const { bluetoothSerialMonitors } = await import(
+		"./services/bluetooth/bluetooth.js"
+	);
+	const { server } = await import("./services/rest/rest.js");
+	const { webSocketServer } = await import("./services/socket/socket.js");
+	const { gpioProcess } = await import("./services/gpio/gpio.js");
+	// await import("./services/print/print.js");
 	await import("./services/browser/browser.js");
 
 	process.on("SIGINT", () => closeEverything(1));
@@ -11,12 +13,12 @@ setTimeout(async () => {
 	process.on("SIGTERM", () => closeEverything(0));
 
 	function closeEverything(eventId) {
-		bluetoothSerialMonitors.forEach((monitor) => monitor.kill());
 		server.close();
 		webSocketServer.clients.forEach((client) => client.close());
 		webSocketServer.close();
 		gpioProcess.kill();
+		bluetoothSerialMonitors.forEach((monitor) => monitor.kill());
 
 		process.exit(eventId);
 	}
-}, 30_000);
+}, 10_000);
