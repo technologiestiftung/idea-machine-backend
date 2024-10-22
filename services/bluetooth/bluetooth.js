@@ -51,9 +51,10 @@ function createBluetoothSerialMonitor({ diceId, diceMacAddress, rfcomm }) {
 	);
 
 	picocom.stdout.on("data", (data) => {
-		// console.log("data", data.toString());
+		const trimmedData = data.toString().trim();
+		// console.log("data", trimmedData);
 
-		if (data.toString().length > 2) {
+		if (trimmedData.length > 2) {
 			// console.log("data is bigger than 2, ignoring for setting dice");
 			return;
 		}
